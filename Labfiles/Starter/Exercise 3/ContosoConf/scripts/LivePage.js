@@ -48,10 +48,10 @@ export class LivePage {
     handleSocketMessage(event) {
         // TODO: Parse the event data into message object.
         const message = JSON.parse(event.data);
-
-        // TODO: Check if message has a `questions` property, before calling handleQuestionsMessage
         if (message.questions) {
             this.handleQuestionsMessage(message);
+        } else if (message.remove) {
+            this.handleRemoveMessage(message);
         }
     }
 
@@ -78,7 +78,7 @@ export class LivePage {
 
     displayQuestion(question) {
         const item = this.createQuestionItem(question);
-        //item.appendChild(this.createReportLink());
+        item.appendChild(this.createReportLink());
         this.questionListElement.appendChild(item);
     }
 
@@ -114,6 +114,7 @@ export class LivePage {
 
     reportQuestion(questionId) {
         // TODO: Send socket message { report: questionId }
+        this.socket.send(JSON.stringify({ report: questionId }));
     }
 }
 // SIG // Begin signature block

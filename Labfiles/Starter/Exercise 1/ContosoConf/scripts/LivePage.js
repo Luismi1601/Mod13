@@ -8,6 +8,7 @@ export class LivePage {
     initializeSocket(socket) {
         this.socket = socket;
         // TODO: Assign a callback to handle messages from the socket.
+        this.socket.onmessage = this.handleSocketMessage.bind(this);
     }
 
     initializeUI(sectionElement) {
@@ -43,10 +44,13 @@ export class LivePage {
 
     handleSocketMessage(event) {
         // TODO: Parse the event data into message object.
+        const message = JSON.parse(event.data);
         // const message = ... ;
 
         // TODO: Check if message has a `questions` property, before calling handleQuestionsMessage
-        this.handleQuestionsMessage(message);
+        if (message.questions) {
+            this.handleQuestionsMessage(message);
+        }
     }
 
     handleQuestionsMessage(message) {
@@ -57,6 +61,7 @@ export class LivePage {
         //   ] }
 
         // TODO: Display each question in the page, using the displayQuestion function.
+        message.questions.forEach(this.displayQuestion, this);
     }
 
     handleRemoveMessage(message) {
